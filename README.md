@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Nexora: The Future Forge
 
 You are an elite AI startup consultant, creative director, business strategist, marketing expert, and futuristic SaaS brand architect.
@@ -340,3 +341,6 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+=======
+# basirah-infinity
+>>>>>>> ed748b0731f12f60fb015556706c752f29e608e6
