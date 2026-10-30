@@ -1,0 +1,895 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Project: Basirah Infinity
+// Primary Admin Bootstrap: basirahinfinity@gmail.com
+//
+// Collection: leads
+// Document ID: auto-generated
+// Fields:
+//   - name: string (required, 1-100 chars)
+//   - email: string (required, valid email, max 255 chars)
+//   - phone: string (optional, max 40 chars)
+//   - company: string (optional, max 100 chars)
+//   - service_interest: string (optional, max 100 chars)
+//   - budget: string (optional, max 100 chars)
+//   - message: string (required, 1-3000 chars)
+//   - source: string (optional, max 100 chars)
+//   - tag: string (optional, max 100 chars)
+//   - status: string (optional, enum: new, contacted, qualified, won, lost)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: orders
+// Document ID: auto-generated
+// Fields:
+//   - client_name: string (required, 1-100 chars)
+//   - client_email: string (required, valid email, max 255 chars)
+//   - client_id: string (optional, UID of the client, max 128 chars)
+//   - lead_id: string (optional, referenced lead ID, max 128 chars)
+//   - service: string (required, 1-100 chars)
+//   - package: string (required, 1-100 chars)
+//   - amount: number | null (optional, positive or zero)
+//   - notes: string (optional, max 4000 chars)
+//   - status: string (required, enum: pending, in_progress, delivered, cancelled)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: messages
+// Document ID: auto-generated
+// Fields:
+//   - sender_id: string (required, UID of sender, max 128 chars)
+//   - sender_name: string (required, 1-100 chars)
+//   - sender_email: string (required, valid email, max 255 chars)
+//   - subject: string (required, 1-200 chars)
+//   - body: string (required, 1-5000 chars)
+//   - from_role: string (optional, max 50 chars)
+//   - read: bool (required)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: collaborations
+// Document ID: auto-generated
+// Fields:
+//   - name: string (required, 1-100 chars)
+//   - email: string (required, valid email, max 255 chars)
+//   - type: string (required, enum: agency, freelancer, partner, investor, creator)
+//   - portfolio_url: string (optional, max 500 chars)
+//   - proposal: string (required, 1-4000 chars)
+//   - status: string (optional, enum: pending, approved, rejected)
+//   - response_sent: bool (optional)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: notifications
+// Document ID: auto-generated
+// Fields:
+//   - to_email: string (required, valid email, max 255 chars)
+//   - subject: string (required, 1-255 chars)
+//   - body: string (required, 1-10000 chars)
+//   - kind: string (optional, max 50 chars)
+//   - status: string (optional, enum: queued, sent, failed, sending)
+//   - sent: bool (optional)
+//   - campaign_id: string (optional, max 100 chars)
+//   - sent_at: timestamp | string (optional)
+//   - failed_at: timestamp | string (optional)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: announcements
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required, 1-200 chars)
+//   - body: string (required, 1-5000 chars)
+//   - pinned: bool (optional)
+//   - published: bool (required)
+//   - created_by: string | null (optional, UID, max 128 chars)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: user_roles
+// Document ID: {uid} (Firebase Auth UID)
+// Fields:
+//   - roles: list of strings (required, allowed: admin, assistant, client, partner, max 5 items)
+//   - displayName: string | null (optional, max 100 chars)
+//   - email: string | null (optional, max 255 chars)
+//   - company: string | null (optional, max 100 chars)
+//   - agencyName: string | null (optional, max 100 chars)
+//   - specialization: string | null (optional, max 100 chars)
+//   - portfolioUrl: string | null (optional, max 500 chars)
+//   - partnershipType: string | null (optional, max 100 chars)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: audit_log
+// Document ID: auto-generated
+// Fields:
+//   - actor_id: string (required, max 128 chars)
+//   - actor_email: string (optional, max 255 chars)
+//   - action: string (required, 1-100 chars)
+//   - target_type: string | null (optional, max 100 chars)
+//   - target_id: string | null (optional, max 128 chars)
+//   - meta: map (optional)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: lab_assets
+// Document ID: auto-generated
+// Fields:
+//   - kind: string (required, enum: logo, icon, brand, poster, graphic)
+//   - prompt: string (required, 1-1000 chars)
+//   - image_data: string (optional, base64 data URL or asset URL, max 500000 chars)
+//   - created_by: string (required, UID or author identifier, max 128 chars)
+//   - created_at: timestamp | string (optional)
+//
+// Collection: services
+// Document ID: auto-generated or slug
+// Fields:
+//   - slug: string (optional, max 100 chars)
+//   - title: string (required, 1-150 chars)
+//   - short: string (optional, max 500 chars)
+//   - description: string (optional, max 3000 chars)
+//   - price: string (optional, max 100 chars)
+//   - timeline: string (optional, max 100 chars)
+//   - icon: string (optional, max 50 chars)
+//   - tag: string (optional, max 50 chars)
+//   - features: list of strings (optional, max 30 items)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: works
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required, 1-150 chars)
+//   - category: string (optional, max 100 chars)
+//   - client: string (optional, max 100 chars)
+//   - summary: string (optional, max 3000 chars)
+//   - impact: string (optional, max 100 chars)
+//   - tag: string (optional, max 50 chars)
+//   - gradient: string (optional, max 100 chars)
+//   - liveUrl: string (optional, max 500 chars)
+//   - featured: bool (optional)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: pricing
+// Document ID: auto-generated
+// Fields:
+//   - name: string (required, 1-100 chars)
+//   - price: string (optional, max 100 chars)
+//   - period: string (optional, max 100 chars)
+//   - description: string (optional, max 2000 chars)
+//   - popular: bool (optional)
+//   - badge: string (optional, max 50 chars)
+//   - deliveryTime: string (optional, max 100 chars)
+//   - cta: string (optional, max 100 chars)
+//   - features: list of strings (optional, max 30 items)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: about_content
+// Document ID: about-main or auto-generated
+// Fields:
+//   - founder_name: string (optional, max 100 chars)
+//   - founder_title: string (optional, max 150 chars)
+//   - founder_phone: string (optional, max 50 chars)
+//   - founder_email: string (optional, max 255 chars)
+//   - location: string (optional, max 150 chars)
+//   - bio_p1: string (optional, max 3000 chars)
+//   - bio_p2: string (optional, max 3000 chars)
+//   - vision: string (optional, max 3000 chars)
+//   - mission: string (optional, max 3000 chars)
+//   - stats: list of maps (optional, max 20 items)
+//   - values: list of maps (optional, max 20 items)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: project_channels
+// Document ID: auto-generated
+// Fields:
+//   - client_id: string (required, UID of client, max 128 chars)
+//   - client_name: string (optional, max 100 chars)
+//   - client_email: string (optional, max 255 chars)
+//   - client_company: string (optional, max 100 chars)
+//   - client_phone: string (optional, max 50 chars)
+//   - project_title: string (required, 1-200 chars)
+//   - initial_brief: string (optional, max 5000 chars)
+//   - status: string (optional, max 50 chars)
+//   - questions: list of maps (optional, max 50 items)
+//   - specification: map | null (optional)
+//   - payment: map | null (optional)
+//   - delivery: map | null (optional)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: studio_components
+// Document ID: auto-generated
+// Fields:
+//   - title / name: string (at least one required, 1-150 chars)
+//   - category: string (optional, max 100 chars)
+//   - type: string (optional, max 100 chars)
+//   - code: string (optional, max 100000 chars)
+//   - jsxCode: string (optional, max 100000 chars)
+//   - cssCode: string (optional, max 100000 chars)
+//   - preview: string (optional, max 500000 chars)
+//   - previewType: string (optional, max 100 chars)
+//   - description: string (optional, max 3000 chars)
+//   - tags: list of strings (optional, max 30 items)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// Collection: partner_profiles
+// Document ID: auto-generated
+// Fields:
+//   - partner_id: string (required, UID of partner, max 128 chars)
+//   - name / partner_name / displayName: string (at least one required, 1-100 chars)
+//   - email: string | null (optional, valid email, max 255 chars)
+//   - company: string (optional, max 100 chars)
+//   - agency_name / agencyName: string (optional, max 100 chars)
+//   - specialization: string (optional, max 100 chars)
+//   - portfolio_url / portfolioUrl: string (optional, max 500 chars)
+//   - partnership_type / partnershipType: string (optional, max 100 chars)
+//   - phone: string (optional, max 50 chars)
+//   - tier: string (optional, max 50 chars)
+//   - status: string (optional, max 50 chars)
+//   - referral_code: string (optional, max 100 chars)
+//   - commission_rate: number | null (optional, >= 0)
+//   - total_referred_revenue: number | null (optional, >= 0)
+//   - commission_earned: number | null (optional, >= 0)
+//   - pending_payout: number | null (optional, >= 0)
+//   - active_sprints: number | null (optional, >= 0)
+//   - bio: string (optional, max 3000 chars)
+//   - payout_info: map | null (optional)
+//   - created_at: timestamp | string (optional)
+//   - updated_at: timestamp | string (optional)
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return request.auth != null && (
+        (request.auth.token.email != null && request.auth.token.email.lower() == 'basirahinfinity@gmail.com') ||
+        (exists(/databases/$(database)/documents/user_roles/$(request.auth.uid)) &&
+         'admin' in get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.roles)
+      );
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() >= 3 &&
+        email.size() <= 255 &&
+        email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data) ||
+             request.resource.data[field] == null ||
+             (request.resource.data[field] is string &&
+              request.resource.data[field].size() >= minLen &&
+              request.resource.data[field].size() <= maxLen);
+    }
+
+    function isValidTimestampOrString(field) {
+      return !(field in request.resource.data) ||
+             request.resource.data[field] == null ||
+             request.resource.data[field] is timestamp ||
+             (request.resource.data[field] is string && request.resource.data[field].size() <= 60);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidLead(data) {
+      return hasRequiredFields(['name', 'email', 'message']) &&
+             hasOnlyAllowedFields([
+               'name', 'email', 'phone', 'company',
+               'service_interest', 'budget', 'message',
+               'source', 'tag', 'status', 'created_at'
+             ]) &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             isValidEmail(data.email) &&
+             isValidOptionalString('phone', 0, 40) &&
+             isValidOptionalString('company', 0, 100) &&
+             isValidOptionalString('service_interest', 0, 100) &&
+             isValidOptionalString('budget', 0, 100) &&
+             data.message is string && data.message.size() >= 1 && data.message.size() <= 3000 &&
+             isValidOptionalString('source', 0, 100) &&
+             isValidOptionalString('tag', 0, 100) &&
+             (!('status' in data) || (data.status is string && data.status in ['new', 'contacted', 'qualified', 'won', 'lost'])) &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidOrder(data) {
+      return hasRequiredFields(['client_name', 'client_email', 'service', 'package', 'status']) &&
+             hasOnlyAllowedFields([
+               'client_name', 'client_email', 'client_id', 'lead_id',
+               'service', 'package', 'amount', 'notes', 'status', 'created_at'
+             ]) &&
+             data.client_name is string && data.client_name.size() >= 1 && data.client_name.size() <= 100 &&
+             isValidEmail(data.client_email) &&
+             isValidOptionalString('client_id', 1, 128) &&
+             isValidOptionalString('lead_id', 1, 128) &&
+             data.service is string && data.service.size() >= 1 && data.service.size() <= 100 &&
+             data.package is string && data.package.size() >= 1 && data.package.size() <= 100 &&
+             (!('amount' in data) || data.amount == null || (data.amount is number && data.amount >= 0)) &&
+             isValidOptionalString('notes', 0, 4000) &&
+             data.status is string && data.status in ['pending', 'in_progress', 'delivered', 'cancelled'] &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidMessage(data) {
+      return hasRequiredFields(['sender_id', 'sender_name', 'sender_email', 'subject', 'body', 'read']) &&
+             hasOnlyAllowedFields([
+               'sender_id', 'sender_name', 'sender_email',
+               'subject', 'body', 'from_role', 'read', 'created_at'
+             ]) &&
+             data.sender_id is string && data.sender_id.size() >= 1 && data.sender_id.size() <= 128 &&
+             data.sender_name is string && data.sender_name.size() >= 1 && data.sender_name.size() <= 100 &&
+             isValidEmail(data.sender_email) &&
+             data.subject is string && data.subject.size() >= 1 && data.subject.size() <= 200 &&
+             data.body is string && data.body.size() >= 1 && data.body.size() <= 5000 &&
+             isValidOptionalString('from_role', 1, 50) &&
+             data.read is bool &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidCollaboration(data) {
+      return hasRequiredFields(['name', 'email', 'type', 'proposal']) &&
+             hasOnlyAllowedFields([
+               'name', 'email', 'type', 'portfolio_url',
+               'proposal', 'status', 'response_sent', 'created_at'
+             ]) &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             isValidEmail(data.email) &&
+             data.type is string && data.type in ['agency', 'freelancer', 'partner', 'investor', 'creator'] &&
+             isValidOptionalString('portfolio_url', 0, 500) &&
+             data.proposal is string && data.proposal.size() >= 1 && data.proposal.size() <= 4000 &&
+             (!('status' in data) || (data.status is string && data.status in ['pending', 'approved', 'rejected'])) &&
+             (!('response_sent' in data) || data.response_sent is bool) &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidNotification(data) {
+      return hasRequiredFields(['to_email', 'subject', 'body']) &&
+             hasOnlyAllowedFields([
+               'to_email', 'subject', 'body', 'kind',
+               'status', 'sent', 'campaign_id', 'sent_at', 'failed_at', 'created_at'
+             ]) &&
+             isValidEmail(data.to_email) &&
+             data.subject is string && data.subject.size() >= 1 && data.subject.size() <= 255 &&
+             data.body is string && data.body.size() >= 1 && data.body.size() <= 10000 &&
+             isValidOptionalString('kind', 1, 50) &&
+             (!('status' in data) || (data.status is string && data.status in ['queued', 'sent', 'failed', 'sending'])) &&
+             (!('sent' in data) || data.sent is bool) &&
+             isValidOptionalString('campaign_id', 1, 100) &&
+             isValidTimestampOrString('sent_at') &&
+             isValidTimestampOrString('failed_at') &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidAnnouncement(data) {
+      return hasRequiredFields(['title', 'body', 'published']) &&
+             hasOnlyAllowedFields([
+               'title', 'body', 'pinned', 'published', 'created_by', 'created_at'
+             ]) &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 200 &&
+             data.body is string && data.body.size() >= 1 && data.body.size() <= 5000 &&
+             (!('pinned' in data) || data.pinned is bool) &&
+             data.published is bool &&
+             (!('created_by' in data) || data.created_by == null || (data.created_by is string && data.created_by.size() <= 128)) &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidUserRole(data) {
+      return hasRequiredFields(['roles']) &&
+             hasOnlyAllowedFields([
+               'roles', 'displayName', 'email', 'company',
+               'agencyName', 'specialization', 'portfolioUrl',
+               'partnershipType', 'created_at', 'updated_at'
+             ]) &&
+             data.roles is list &&
+             data.roles.size() >= 1 &&
+             data.roles.size() <= 5 &&
+             data.roles.hasOnly(['admin', 'assistant', 'client', 'partner']) &&
+             isValidOptionalString('displayName', 0, 100) &&
+             (!('email' in data) || data.email == null || isValidEmail(data.email)) &&
+             isValidOptionalString('company', 0, 100) &&
+             isValidOptionalString('agencyName', 0, 100) &&
+             isValidOptionalString('specialization', 0, 100) &&
+             isValidOptionalString('portfolioUrl', 0, 500) &&
+             isValidOptionalString('partnershipType', 0, 100) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidAuditLog(data) {
+      return hasRequiredFields(['actor_id', 'action']) &&
+             hasOnlyAllowedFields([
+               'actor_id', 'actor_email', 'action',
+               'target_type', 'target_id', 'meta', 'created_at'
+             ]) &&
+             data.actor_id is string && data.actor_id.size() >= 1 && data.actor_id.size() <= 128 &&
+             isValidOptionalString('actor_email', 0, 255) &&
+             data.action is string && data.action.size() >= 1 && data.action.size() <= 100 &&
+             (!('target_type' in data) || data.target_type == null || (data.target_type is string && data.target_type.size() <= 100)) &&
+             (!('target_id' in data) || data.target_id == null || (data.target_id is string && data.target_id.size() <= 128)) &&
+             (!('meta' in data) || data.meta is map) &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidLabAsset(data) {
+      return hasRequiredFields(['kind', 'prompt', 'created_by']) &&
+             hasOnlyAllowedFields(['kind', 'prompt', 'image_data', 'created_by', 'created_at']) &&
+             data.kind is string && data.kind in ['logo', 'icon', 'brand', 'poster', 'graphic'] &&
+             data.prompt is string && data.prompt.size() >= 1 && data.prompt.size() <= 1000 &&
+             isValidOptionalString('image_data', 0, 500000) &&
+             data.created_by is string && data.created_by.size() >= 1 && data.created_by.size() <= 128 &&
+             isValidTimestampOrString('created_at');
+    }
+
+    function isValidService(data) {
+      return hasRequiredFields(['title']) &&
+             hasOnlyAllowedFields([
+               'id', 'slug', 'title', 'short', 'description',
+               'price', 'timeline', 'icon', 'tag', 'features',
+               'created_at', 'updated_at'
+             ]) &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 150 &&
+             isValidOptionalString('id', 1, 100) &&
+             isValidOptionalString('slug', 1, 100) &&
+             isValidOptionalString('short', 0, 500) &&
+             isValidOptionalString('description', 0, 3000) &&
+             isValidOptionalString('price', 0, 100) &&
+             isValidOptionalString('timeline', 0, 100) &&
+             isValidOptionalString('icon', 0, 50) &&
+             isValidOptionalString('tag', 0, 50) &&
+             (!('features' in data) || (data.features is list && data.features.size() <= 30)) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidWork(data) {
+      return hasRequiredFields(['title']) &&
+             hasOnlyAllowedFields([
+               'id', 'title', 'category', 'client', 'summary',
+               'impact', 'tag', 'gradient', 'liveUrl', 'featured',
+               'created_at', 'updated_at'
+             ]) &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 150 &&
+             isValidOptionalString('id', 1, 100) &&
+             isValidOptionalString('category', 0, 100) &&
+             isValidOptionalString('client', 0, 100) &&
+             isValidOptionalString('summary', 0, 3000) &&
+             isValidOptionalString('impact', 0, 100) &&
+             isValidOptionalString('tag', 0, 50) &&
+             isValidOptionalString('gradient', 0, 100) &&
+             isValidOptionalString('liveUrl', 0, 500) &&
+             (!('featured' in data) || data.featured is bool) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidPricing(data) {
+      return hasRequiredFields(['name']) &&
+             hasOnlyAllowedFields([
+               'id', 'name', 'price', 'period', 'description',
+               'popular', 'badge', 'deliveryTime', 'cta', 'features',
+               'created_at', 'updated_at'
+             ]) &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             isValidOptionalString('id', 1, 100) &&
+             isValidOptionalString('price', 0, 100) &&
+             isValidOptionalString('period', 0, 100) &&
+             isValidOptionalString('description', 0, 2000) &&
+             (!('popular' in data) || data.popular is bool) &&
+             isValidOptionalString('badge', 0, 50) &&
+             isValidOptionalString('deliveryTime', 0, 100) &&
+             isValidOptionalString('cta', 0, 100) &&
+             (!('features' in data) || (data.features is list && data.features.size() <= 30)) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidAboutContent(data) {
+      return hasOnlyAllowedFields([
+               'id', 'founder_name', 'founder_title', 'founder_phone',
+               'founder_email', 'location', 'bio_p1', 'bio_p2',
+               'vision', 'mission', 'stats', 'values',
+               'created_at', 'updated_at'
+             ]) &&
+             isValidOptionalString('id', 1, 100) &&
+             isValidOptionalString('founder_name', 0, 100) &&
+             isValidOptionalString('founder_title', 0, 150) &&
+             isValidOptionalString('founder_phone', 0, 50) &&
+             isValidOptionalString('founder_email', 0, 255) &&
+             isValidOptionalString('location', 0, 150) &&
+             isValidOptionalString('bio_p1', 0, 3000) &&
+             isValidOptionalString('bio_p2', 0, 3000) &&
+             isValidOptionalString('vision', 0, 3000) &&
+             isValidOptionalString('mission', 0, 3000) &&
+             (!('stats' in data) || (data.stats is list && data.stats.size() <= 20)) &&
+             (!('values' in data) || (data.values is list && data.values.size() <= 20)) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidProjectChannel(data) {
+      return hasRequiredFields(['client_id', 'project_title']) &&
+             hasOnlyAllowedFields([
+               'id', 'client_id', 'client_name', 'client_email',
+               'client_company', 'client_phone', 'project_title',
+               'initial_brief', 'status', 'questions', 'specification',
+               'payment', 'delivery', 'created_at', 'updated_at'
+             ]) &&
+             data.client_id is string && data.client_id.size() >= 1 && data.client_id.size() <= 128 &&
+             isValidOptionalString('client_name', 0, 100) &&
+             isValidOptionalString('client_email', 0, 255) &&
+             isValidOptionalString('client_company', 0, 100) &&
+             isValidOptionalString('client_phone', 0, 50) &&
+             data.project_title is string && data.project_title.size() >= 1 && data.project_title.size() <= 200 &&
+             isValidOptionalString('initial_brief', 0, 5000) &&
+             isValidOptionalString('status', 0, 50) &&
+             (!('questions' in data) || (data.questions is list && data.questions.size() <= 50)) &&
+             (!('specification' in data) || data.specification == null || data.specification is map) &&
+             (!('payment' in data) || data.payment == null || data.payment is map) &&
+             (!('delivery' in data) || data.delivery == null || data.delivery is map) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidStudioComponent(data) {
+      return hasOnlyAllowedFields([
+               'id', 'title', 'name', 'category', 'type',
+               'code', 'jsxCode', 'cssCode', 'preview', 'previewType',
+               'description', 'tags', 'created_at', 'updated_at'
+             ]) &&
+             (('title' in data && data.title is string && data.title.size() >= 1 && data.title.size() <= 150) ||
+              ('name' in data && data.name is string && data.name.size() >= 1 && data.name.size() <= 150)) &&
+             isValidOptionalString('id', 1, 100) &&
+             isValidOptionalString('title', 1, 150) &&
+             isValidOptionalString('name', 1, 150) &&
+             isValidOptionalString('category', 0, 100) &&
+             isValidOptionalString('type', 0, 100) &&
+             isValidOptionalString('code', 0, 100000) &&
+             isValidOptionalString('jsxCode', 0, 100000) &&
+             isValidOptionalString('cssCode', 0, 100000) &&
+             isValidOptionalString('preview', 0, 500000) &&
+             isValidOptionalString('previewType', 0, 100) &&
+             isValidOptionalString('description', 0, 3000) &&
+             (!('tags' in data) || (data.tags is list && data.tags.size() <= 30)) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    function isValidPartnerProfile(data) {
+      return hasRequiredFields(['partner_id']) &&
+             hasOnlyAllowedFields([
+               'id', 'partner_id', 'name', 'partner_name', 'displayName',
+               'email', 'company', 'agency_name', 'agencyName', 'specialization',
+               'portfolio_url', 'portfolioUrl', 'partnership_type', 'partnershipType',
+               'phone', 'tier', 'status', 'commission_rate', 'referral_code',
+               'total_referred_revenue', 'commission_earned', 'pending_payout',
+               'active_sprints', 'bio', 'payout_info', 'created_at', 'updated_at'
+             ]) &&
+             data.partner_id is string && data.partner_id.size() >= 1 && data.partner_id.size() <= 128 &&
+             (('name' in data && data.name is string && data.name.size() >= 1 && data.name.size() <= 100) ||
+              ('partner_name' in data && data.partner_name is string && data.partner_name.size() >= 1 && data.partner_name.size() <= 100) ||
+              ('displayName' in data && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100)) &&
+             isValidOptionalString('id', 1, 100) &&
+             isValidOptionalString('name', 1, 100) &&
+             isValidOptionalString('partner_name', 1, 100) &&
+             isValidOptionalString('displayName', 1, 100) &&
+             (!('email' in data) || data.email == null || isValidEmail(data.email)) &&
+             isValidOptionalString('company', 0, 100) &&
+             isValidOptionalString('agency_name', 0, 100) &&
+             isValidOptionalString('agencyName', 0, 100) &&
+             isValidOptionalString('specialization', 0, 100) &&
+             isValidOptionalString('portfolio_url', 0, 500) &&
+             isValidOptionalString('portfolioUrl', 0, 500) &&
+             isValidOptionalString('partnership_type', 0, 100) &&
+             isValidOptionalString('partnershipType', 0, 100) &&
+             isValidOptionalString('phone', 0, 50) &&
+             isValidOptionalString('tier', 0, 50) &&
+             isValidOptionalString('status', 0, 50) &&
+             isValidOptionalString('referral_code', 0, 100) &&
+             (!('commission_rate' in data) || data.commission_rate == null || (data.commission_rate is number && data.commission_rate >= 0)) &&
+             (!('total_referred_revenue' in data) || data.total_referred_revenue == null || (data.total_referred_revenue is number && data.total_referred_revenue >= 0)) &&
+             (!('commission_earned' in data) || data.commission_earned == null || (data.commission_earned is number && data.commission_earned >= 0)) &&
+             (!('pending_payout' in data) || data.pending_payout == null || (data.pending_payout is number && data.pending_payout >= 0)) &&
+             (!('active_sprints' in data) || data.active_sprints == null || (data.active_sprints is number && data.active_sprints >= 0)) &&
+             isValidOptionalString('bio', 0, 3000) &&
+             (!('payout_info' in data) || data.payout_info == null || data.payout_info is map) &&
+             isValidTimestampOrString('created_at') &&
+             isValidTimestampOrString('updated_at');
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // -------------------------------------------------------------
+    // 1. leads
+    // Public contact and order inquiries. Only admin can read or manage.
+    // -------------------------------------------------------------
+    match /leads/{leadId} {
+      allow create: if isValidLead(request.resource.data);
+      allow read, update, delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 2. orders
+    // Client-scoped project orders. Admin has full read/write management.
+    // -------------------------------------------------------------
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (
+        isAuthenticated() && (
+          resource.data.client_id == request.auth.uid ||
+          (resource.data.client_email is string &&
+           request.auth.token.email is string &&
+           resource.data.client_email == request.auth.token.email)
+        )
+      );
+      allow create: if isValidOrder(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() && (
+            (request.auth.token.email is string && request.resource.data.client_email == request.auth.token.email) ||
+            ('client_id' in request.resource.data && request.resource.data.client_id == request.auth.uid)
+          )
+        )
+      );
+      allow update: if isValidOrder(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() &&
+          resource.data.client_id == request.auth.uid &&
+          areImmutableFieldsUnchanged(['client_id', 'client_email', 'service', 'package', 'amount', 'created_at'])
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 3. messages
+    // Authenticated user direct communications. Sender can read own; admin manages.
+    // -------------------------------------------------------------
+    match /messages/{messageId} {
+      allow read: if isAdmin() || (
+        isAuthenticated() && (
+          resource.data.sender_id == request.auth.uid ||
+          (resource.data.sender_email is string &&
+           request.auth.token.email is string &&
+           resource.data.sender_email == request.auth.token.email)
+        )
+      );
+      allow create: if isValidMessage(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() &&
+          request.resource.data.sender_id == request.auth.uid &&
+          (request.auth.token.email == null || request.resource.data.sender_email == request.auth.token.email)
+        )
+      );
+      allow update: if isAdmin() && isValidMessage(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 4. collaborations
+    // Partnership/agency proposals. Any user can create; admin managed.
+    // -------------------------------------------------------------
+    match /collaborations/{collabId} {
+      allow create: if isValidCollaboration(request.resource.data);
+      allow read, update, delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 5. notifications
+    // Transactional and queued notification logs.
+    // -------------------------------------------------------------
+    match /notifications/{notificationId} {
+      allow read: if isAdmin() || (
+        isAuthenticated() &&
+        request.auth.token.email is string &&
+        resource.data.to_email == request.auth.token.email
+      );
+      allow create: if isValidNotification(request.resource.data);
+      allow update: if isAdmin() && isValidNotification(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 6. announcements
+    // Studio announcements. Published items are publicly readable.
+    // -------------------------------------------------------------
+    match /announcements/{announcementId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create: if isAdmin() && isValidAnnouncement(request.resource.data);
+      allow update: if isAdmin() && isValidAnnouncement(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 7. user_roles
+    // User role mappings. Users can read/write their own record without self-escalation.
+    // -------------------------------------------------------------
+    match /user_roles/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isValidUserRole(request.resource.data) && (
+        isAdmin() || (
+          isOwner(uid) &&
+          !('admin' in request.resource.data.roles) &&
+          !('assistant' in request.resource.data.roles)
+        )
+      );
+      allow update: if isValidUserRole(request.resource.data) && (
+        isAdmin() || (
+          isOwner(uid) &&
+          request.resource.data.roles == resource.data.roles
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 8. audit_log
+    // Audit logs. Append-only for authenticated users/admin, admin read-only.
+    // -------------------------------------------------------------
+    match /audit_log/{logId} {
+      allow read: if isAdmin();
+      allow create: if (isAuthenticated() || isAdmin()) && isValidAuditLog(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    // -------------------------------------------------------------
+    // 9. lab_assets
+    // Studio & Creative Lab generated assets.
+    // -------------------------------------------------------------
+    match /lab_assets/{assetId} {
+      allow read: if isAuthenticated() || isAdmin();
+      allow create: if (isAuthenticated() || isAdmin()) && isValidLabAsset(request.resource.data);
+      allow update: if (isAdmin() || (isAuthenticated() && resource.data.created_by == request.auth.uid)) && isValidLabAsset(request.resource.data);
+      allow delete: if isAuthenticated() || isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 10. services
+    // Studio services catalog. Publicly readable; admin managed.
+    // -------------------------------------------------------------
+    match /services/{serviceId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidService(request.resource.data);
+      allow update: if isAdmin() && isValidService(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 11. works
+    // Portfolio showcase and case studies. Publicly readable; admin managed.
+    // -------------------------------------------------------------
+    match /works/{workId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidWork(request.resource.data);
+      allow update: if isAdmin() && isValidWork(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 12. pricing
+    // Studio pricing packages and tiers. Publicly readable; admin managed.
+    // -------------------------------------------------------------
+    match /pricing/{tierId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidPricing(request.resource.data);
+      allow update: if isAdmin() && isValidPricing(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 13. about_content
+    // Studio profile, vision, leadership bio. Publicly readable; admin managed.
+    // -------------------------------------------------------------
+    match /about_content/{contentId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidAboutContent(request.resource.data);
+      allow update: if isAdmin() && isValidAboutContent(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 14. project_channels
+    // Dedicated client channels, requirement specifications, milestones.
+    // -------------------------------------------------------------
+    match /project_channels/{channelId} {
+      allow read: if isAdmin() || (
+        isAuthenticated() && (
+          resource.data.client_id == request.auth.uid ||
+          (resource.data.client_email is string &&
+           request.auth.token.email is string &&
+           resource.data.client_email == request.auth.token.email)
+        )
+      );
+      allow create: if isValidProjectChannel(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() && (
+            request.resource.data.client_id == request.auth.uid ||
+            (request.auth.token.email is string &&
+             request.resource.data.client_email == request.auth.token.email)
+          )
+        )
+      );
+      allow update: if isValidProjectChannel(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() && (
+            resource.data.client_id == request.auth.uid ||
+            (resource.data.client_email is string &&
+             request.auth.token.email is string &&
+             resource.data.client_email == request.auth.token.email)
+          ) &&
+          areImmutableFieldsUnchanged(['client_id', 'created_at'])
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 15. studio_components
+    // Reusable UI/design studio component library. Public read; authenticated & admin managed.
+    // -------------------------------------------------------------
+    match /studio_components/{componentId} {
+      allow read: if true;
+      allow create, update: if (isAdmin() || isAuthenticated()) && isValidStudioComponent(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 16. partner_profiles
+    // Agency, affiliate, and creator partner profiles.
+    // -------------------------------------------------------------
+    match /partner_profiles/{profileId} {
+      allow read: if isAdmin() || (
+        isAuthenticated() && resource.data.partner_id == request.auth.uid
+      );
+      allow create: if isValidPartnerProfile(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() && request.resource.data.partner_id == request.auth.uid
+        )
+      );
+      allow update: if isValidPartnerProfile(request.resource.data) && (
+        isAdmin() || (
+          isAuthenticated() &&
+          resource.data.partner_id == request.auth.uid &&
+          areImmutableFieldsUnchanged(['partner_id', 'created_at'])
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // Default Deny Fallback
+    // -------------------------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
