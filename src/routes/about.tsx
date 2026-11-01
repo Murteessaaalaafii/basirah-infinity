@@ -6,14 +6,25 @@ import { SiteShell } from "@/components/SiteShell";
 import { Button } from "@/components/ui/button";
 import { fetchAboutContent } from "@/integrations/firebase/helpers";
 import portraitImg from "@/assets/murtesa-portrait.png";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, getPersonSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About Basirah Infinity — Founded & Directed by Murtesa Alafi" },
-      { name: "description", content: "Basirah Infinity is an AI-first digital agency founded by Murtesa Alafi, turning skills into systems and ideas into recurring revenue." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "About Murtesa Alafi & Basirah Infinity — Leadership & Systems Architecture",
+      description:
+        "Meet Murtesa Alafi, founder, creative director, and systems architect of Basirah Infinity. Discover our mission, core values, and AI-powered digital growth ecosystem.",
+      path: "/about",
+      type: "profile",
+      keywords: [
+        "Murtesa Alafi",
+        "Murtesa Alafi Biography",
+        "Basirah Infinity Founder",
+        "Creative Technologist Ethiopia",
+        "Digital Studio Leadership",
+      ],
+    }),
   component: AboutPage,
 });
 
@@ -63,6 +74,14 @@ function AboutPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "About", item: `${SITE_URL}/about` },
+          ]),
+          getPersonSchema(),
+        ]}
+      />
       {/* HERO */}
       <section className="mx-auto max-w-4xl px-6 pb-12 pt-16 text-center">
         <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan">

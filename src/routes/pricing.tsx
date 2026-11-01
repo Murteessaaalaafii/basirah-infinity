@@ -1,23 +1,112 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Check, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, Sparkles, HelpCircle, ChevronDown } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { Button } from "@/components/ui/button";
 import { fetchPricingTiers } from "@/integrations/firebase/helpers";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, getFaqSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Transparent, premium pricing for Launch, Growth, and custom Empire packages by Basirah Infinity." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Pricing Plans & Investment Packages — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Transparent, sovereign investment packages: Launch ($499), Growth ($1,490), and bespoke Empire tiers for brands, websites, and autonomous AI systems.",
+      path: "/pricing",
+      keywords: [
+        "Basirah Infinity Pricing",
+        "Murtesa Alafi Rates",
+        "AI Studio Packages",
+        "Web Design Pricing",
+        "Brand Identity Cost",
+      ],
+    }),
   component: PricingPage,
 });
 
+const DEFAULT_TIERS = [
+  {
+    id: "launch",
+    name: "Launch Tier",
+    badge: "FOUNDATION",
+    description: "Ideal for founders, creators, and emerging brands launching their sovereign presence.",
+    price: "$499",
+    period: "project",
+    deliveryTime: "7 - 10 business days",
+    cta: "Start Launch Package",
+    popular: false,
+    features: [
+      "Signature brand identity & vector logo suite",
+      "One-page high-converting modern landing page",
+      "Mobile responsive & SEO foundations",
+      "Social media visual assets pack",
+      "14 days post-launch support",
+    ],
+  },
+  {
+    id: "growth",
+    name: "Growth Tier",
+    badge: "MOST POPULAR",
+    description: "Full-stack digital architecture for scaling businesses ready to dominate their vertical.",
+    price: "$1,490",
+    period: "project",
+    deliveryTime: "14 - 21 business days",
+    cta: "Scale with Growth",
+    popular: true,
+    features: [
+      "Complete brand design system & style guide",
+      "Multi-page custom web platform (React/Next)",
+      "Autonomous AI lead capture & CRM automations",
+      "Social media growth system (30 day content pack)",
+      "Speed, performance & Core Web Vitals optimization",
+      "30 days dedicated post-launch support",
+    ],
+  },
+  {
+    id: "empire",
+    name: "Empire Tier",
+    badge: "BESPOKE ENTERPRISE",
+    description: "Comprehensive end-to-end transformation directed personally by Murtesa Alafi.",
+    price: "Custom",
+    period: "sprint",
+    deliveryTime: "Tailored roadmap",
+    cta: "Request Empire Consultation",
+    popular: false,
+    features: [
+      "Direct architectural direction with Murtesa Alafi",
+      "Bespoke web applications & customer portals",
+      "Custom fine-tuned multi-agent AI ecosystems",
+      "Omnichannel viral marketing & video production",
+      "Private API integrations & enterprise security",
+      "Quarterly executive advisory & priority retainer",
+    ],
+  },
+];
+
+const PRICING_FAQS = [
+  {
+    q: "Are there any hidden fees?",
+    a: "No. Our pricing is completely transparent. Each quote outlines exact deliverables, revision limits, and hosting/infrastructure considerations with zero surprises.",
+  },
+  {
+    q: "What payment terms and methods do you support?",
+    a: "We work on structured milestone terms (typically 50% deposit and 50% upon final sign-off). We accept wire transfers, international bank deposits, and verified payment gateways.",
+  },
+  {
+    q: "Can I upgrade my package during development?",
+    a: "Yes. You can expand your scope or upgrade tiers at any milestone point, with payments credited proportionally.",
+  },
+  {
+    q: "What if I need custom features not listed in the packages?",
+    a: "Select the Empire package or contact us directly. Murtesa Alafi will formulate a bespoke scope document tailored specifically to your organization's technical needs.",
+  },
+];
+
 function PricingPage() {
-  const [tiers, setTiers] = useState<any[]>([]);
+  const [tiers, setTiers] = useState<any[]>(DEFAULT_TIERS);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   useEffect(() => {
     async function load() {
@@ -31,6 +120,14 @@ function PricingPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Pricing", item: `${SITE_URL}/pricing` },
+          ]),
+          getFaqSchema(PRICING_FAQS),
+        ]}
+      />
       <section className="mx-auto max-w-4xl px-6 pb-12 pt-16 text-center">
         <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan mb-4">
           <Sparkles className="h-3 w-3" /> Directed by Murtesa Alafi
@@ -94,6 +191,57 @@ function PricingPage() {
             </motion.div>
           );
         })}
+      </section>
+
+      {/* PRICING FAQ */}
+      <section className="mx-auto max-w-4xl px-6 pb-20">
+        <div className="text-center">
+          <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan mb-3">
+            <HelpCircle className="h-3 w-3" /> Investment Inquiries
+          </span>
+          <h2 className="font-display text-3xl font-bold md:text-4xl">Pricing FAQ</h2>
+          <p className="mt-2 text-muted-foreground">Everything you need to know about commissioning Basirah Infinity.</p>
+        </div>
+
+        <div className="mt-8 space-y-4">
+          {PRICING_FAQS.map((faq, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <div
+                key={faq.q}
+                className="liquid-glass overflow-hidden rounded-2xl border border-white/10 transition-colors"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="flex w-full items-center justify-between p-5 text-left font-display font-semibold text-foreground transition hover:text-neon-cyan"
+                  aria-expanded={isOpen}
+                >
+                  <span className="text-base md:text-lg">{faq.q}</span>
+                  <ChevronDown
+                    className={`h-5 w-5 shrink-0 text-neon-cyan transition-transform duration-300 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <div className="border-t border-white/5 px-5 pb-5 pt-3 text-sm leading-relaxed text-muted-foreground">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
       </section>
     </SiteShell>
   );

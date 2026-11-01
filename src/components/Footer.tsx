@@ -34,6 +34,8 @@ export function Footer() {
             <li><Link to="/collaborate" className="hover:text-foreground transition-colors">Partner & Collaborate</Link></li>
             <li><Link to="/login" className="hover:text-foreground transition-colors">Client & Admin Login</Link></li>
             <li><Link to="/order" className="hover:text-foreground transition-colors">Order a Service</Link></li>
+            <li><Link to="/privacy" className="hover:text-foreground transition-colors text-xs opacity-75 hover:opacity-100">Privacy Policy</Link></li>
+            <li><Link to="/terms" className="hover:text-foreground transition-colors text-xs opacity-75 hover:opacity-100">Terms of Service</Link></li>
           </ul>
         </div>
 
@@ -82,9 +84,12 @@ export function Footer() {
 
       <div className="mx-auto mt-10 max-w-7xl border-t border-white/5 px-6 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-muted-foreground gap-3">
         <p>© {new Date().getFullYear()} Basirah Infinity — Founded & Directed by Murtesa Alafi. All rights reserved.</p>
-        <p className="flex items-center gap-2">
-          <span>Innovate</span> · <span>Empower</span> · <span>Educate</span> · <span>Elevate</span>
-        </p>
+        <div className="flex flex-wrap items-center gap-4">
+          <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+          <Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
+          <a href="/llms.txt" target="_blank" rel="noreferrer" className="text-neon-cyan/90 hover:text-neon-cyan transition-colors font-mono text-[11px]">llms.txt</a>
+          <a href="/sitemap.xml" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors font-mono text-[11px]">Sitemap</a>
+        </div>
       </div>
     </footer>
   );

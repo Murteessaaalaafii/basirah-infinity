@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Brain, Layout, Bot, Megaphone, Palette, Globe, Rocket, Zap, Phone } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Sparkles, Brain, Layout, Bot, Megaphone, Palette, Globe, Rocket, Zap, Phone, HelpCircle, ChevronDown } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { Showcase } from "@/components/Showcase";
 import { ShowreelModal } from "@/components/ShowreelModal";
@@ -8,20 +9,57 @@ import { AnnouncementBanner } from "@/components/AnnouncementBanner";
 import { Button } from "@/components/ui/button";
 import logoBig from "@/assets/ma-logo.jpg";
 import { PortraitShowcase } from "@/components/PortraitShowcase";
+import { JsonLd } from "@/components/JsonLd";
+import {
+  buildRouteSeo,
+  getSoftwareApplicationSchema,
+  getServicesSchema,
+  getFaqSchema,
+} from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Basirah Infinity — By Murtesa Alafi | Next Era of Digital Growth" },
-      { name: "description", content: "Basirah Infinity — AI-powered branding, websites, content & automation. Founded and directed by Murtesa Alafi." },
-      { property: "og:title", content: "Basirah Infinity — By Murtesa Alafi" },
-      { property: "og:description", content: "AI-powered branding, websites, content & automation by Murtesa Alafi." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Basirah Infinity — AI Digital Studio & Software Ecosystem | By Murtesa Alafi",
+      description:
+        "Basirah Infinity is an AI-first digital growth studio founded and directed by Murtesa Alafi. Elite branding, custom web platforms, automated AI pipelines, and strategic creative direction.",
+      path: "/",
+      keywords: [
+        "Basirah Infinity",
+        "Murtesa Alafi",
+        "AI Digital Studio",
+        "Creative Technology",
+        "Web Development Ethiopia",
+        "AI Automation Agency",
+        "Brand Identity Architecture",
+        "Digital Growth Systems",
+      ],
+    }),
   component: Home,
 });
+
+const HOME_FAQS = [
+  {
+    q: "What is Basirah Infinity?",
+    a: "Basirah Infinity is a next-generation AI creative studio and software ecosystem founded and directed by Murtesa Alafi. We engineer high-performance web applications, luxury brand identities, autonomous AI workflow pipelines, and viral content systems for businesses worldwide.",
+  },
+  {
+    q: "Who is Murtesa Alafi?",
+    a: "Murtesa Alafi is the founder, creative director, and systems architect of Basirah Infinity. He leads all strategy, design architecture, and AI implementations, operating from Addis Ababa, Ethiopia with international clientele.",
+  },
+  {
+    q: "What services does Basirah Infinity offer?",
+    a: "Our core tracks include: (1) Brand Architecture & Visual Identity, (2) High-Performance Web & Full-Stack Development, (3) Autonomous AI Workflows & Business Automation, (4) Social Media Engines & Viral Growth, (5) Content Studio & Motion Graphics, and (6) Strategic Enterprise Consulting.",
+  },
+  {
+    q: "How does Basirah Infinity combine AI with human creative direction?",
+    a: "We leverage state-of-the-art generative models and workflow orchestration to accelerate research, prototyping, and execution by 10x, while every final asset is rigorously refined by human creative directors to ensure elite aesthetic quality and brand sovereignty.",
+  },
+  {
+    q: "How do I start a project with Murtesa Alafi?",
+    a: "You can submit an order directly on our Order page, schedule a strategy consultation via the Contact page, or call directly at +251 708 229 717. We review requirements within 24 hours.",
+  },
+];
 
 const highlights = [
   { icon: Palette, t: "Branding & Identity" },
@@ -45,8 +83,17 @@ const stats = [
 ];
 
 function Home() {
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getSoftwareApplicationSchema(),
+          getServicesSchema(),
+          getFaqSchema(HOME_FAQS),
+        ]}
+      />
       <AnnouncementBanner />
       {/* HERO */}
       <section className="relative overflow-hidden pb-24 pt-12">
@@ -169,6 +216,57 @@ function Home() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* FREQUENTLY ASKED QUESTIONS — AI Search & Answer Engine Optimized */}
+      <section className="mx-auto max-w-4xl px-6 py-16">
+        <div className="text-center">
+          <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan mb-3">
+            <HelpCircle className="h-3 w-3" /> Search & Intelligence Brief
+          </span>
+          <h2 className="font-display text-3xl font-bold md:text-4xl">Frequently Asked Questions</h2>
+          <p className="mt-2 text-muted-foreground">Clear answers on how Basirah Infinity and Murtesa Alafi build and scale digital systems.</p>
+        </div>
+
+        <div className="mt-10 space-y-4">
+          {HOME_FAQS.map((faq, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <div
+                key={faq.q}
+                className="liquid-glass overflow-hidden rounded-2xl border border-white/10 transition-colors"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="flex w-full items-center justify-between p-5 text-left font-display font-semibold text-foreground transition hover:text-neon-cyan"
+                  aria-expanded={isOpen}
+                >
+                  <span className="text-base md:text-lg">{faq.q}</span>
+                  <ChevronDown
+                    className={`h-5 w-5 shrink-0 text-neon-cyan transition-transform duration-300 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <div className="border-t border-white/5 px-5 pb-5 pt-3 text-sm leading-relaxed text-muted-foreground">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
       </section>
 

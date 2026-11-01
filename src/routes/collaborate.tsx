@@ -10,14 +10,23 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { insertDoc, ADMIN_PRIMARY_EMAIL } from "@/integrations/firebase/helpers";
 import { toast } from "sonner";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/collaborate")({
-  head: () => ({
-    meta: [
-      { title: "Collaborate — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Partner with Basirah Infinity: agencies, freelancers, investors and creators welcome." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Collaborate & Partner Program — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Join the Basirah Infinity Partner Program. Collaborate with Murtesa Alafi as an agency partner, creator, or technology specialist with recurring revenue share.",
+      path: "/collaborate",
+      keywords: [
+        "Basirah Infinity Partner",
+        "Agency Collaboration",
+        "Murtesa Alafi Partner Program",
+        "Digital Studio Partnership",
+      ],
+    }),
   component: CollabPage,
 });
 
@@ -88,6 +97,13 @@ function CollabPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Collaborate", item: `${SITE_URL}/collaborate` },
+          ]),
+        ]}
+      />
       <section className="mx-auto max-w-3xl px-6 pb-10 pt-16 text-center">
         <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan">
           <Sparkles className="h-3 w-3" /> Partnerships & Synergies

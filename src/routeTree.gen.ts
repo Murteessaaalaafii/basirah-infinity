@@ -18,8 +18,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WorksRouteImport } from './routes/works'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -72,6 +74,11 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -80,6 +87,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorksRoute = WorksRouteImport.update({
@@ -128,8 +140,10 @@ export interface FileRoutesByFullPath {
   '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/terms': typeof TermsRoute
   '/works': typeof WorksRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -147,8 +161,10 @@ export interface FileRoutesByTo {
   '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/terms': typeof TermsRoute
   '/works': typeof WorksRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -168,8 +184,10 @@ export interface FileRoutesById {
   '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/terms': typeof TermsRoute
   '/works': typeof WorksRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -189,8 +207,10 @@ export interface FileRouteTypes {
     | '/order'
     | '/portfolio'
     | '/pricing'
+    | '/privacy'
     | '/register'
     | '/services'
+    | '/terms'
     | '/works'
     | '/admin'
     | '/dashboard'
@@ -208,8 +228,10 @@ export interface FileRouteTypes {
     | '/order'
     | '/portfolio'
     | '/pricing'
+    | '/privacy'
     | '/register'
     | '/services'
+    | '/terms'
     | '/works'
     | '/admin'
     | '/dashboard'
@@ -228,8 +250,10 @@ export interface FileRouteTypes {
     | '/order'
     | '/portfolio'
     | '/pricing'
+    | '/privacy'
     | '/register'
     | '/services'
+    | '/terms'
     | '/works'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
@@ -249,8 +273,10 @@ export interface RootRouteChildren {
   OrderRoute: typeof OrderRoute
   PortfolioRoute: typeof PortfolioRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   ServicesRoute: typeof ServicesRoute
+  TermsRoute: typeof TermsRoute
   WorksRoute: typeof WorksRoute
   ApiChatRoute: typeof ApiChatRoute
 }
@@ -320,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -332,6 +365,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/works': {
@@ -416,8 +456,10 @@ const rootRouteChildren: RootRouteChildren = {
   OrderRoute: OrderRoute,
   PortfolioRoute: PortfolioRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   ServicesRoute: ServicesRoute,
+  TermsRoute: TermsRoute,
   WorksRoute: WorksRoute,
   ApiChatRoute: ApiChatRoute,
 }

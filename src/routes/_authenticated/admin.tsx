@@ -109,6 +109,8 @@ export const Route = createFileRoute("/_authenticated/admin")({
     meta: [
       { title: "Admin Console — Basirah Infinity | Directed by Murtesa Alafi" },
       { name: "description", content: "Executive control panel: CMS, client channels, RSD generator, CRM, orders, pricing, and system administration." },
+      { name: "robots", content: "noindex, nofollow, noarchive" },
+      { name: "googlebot", content: "noindex, nofollow, noarchive" },
     ],
   }),
   beforeLoad: async () => {

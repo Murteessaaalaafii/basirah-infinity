@@ -5,16 +5,115 @@ import { Palette, Layout, Megaphone, Bot, Sparkles, Brain, Check, ArrowRight } f
 import { SiteShell } from "@/components/SiteShell";
 import { Button } from "@/components/ui/button";
 import { fetchServices } from "@/integrations/firebase/helpers";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, getServicesSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/services")({
-  head: () => ({
-    meta: [
-      { title: "Services — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Branding, web platforms, AI systems, social media engines, and strategic consulting by Basirah Infinity." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Services — Basirah Infinity | AI Brand Architecture & Web Engineering",
+      description:
+        "Bespoke digital services directed by Murtesa Alafi: Luxury Brand Identity, High-Performance Web Apps, Autonomous AI Workflows, Content Production, and Enterprise Strategy.",
+      path: "/services",
+      keywords: [
+        "AI Brand Architecture",
+        "Full-Stack Web Development",
+        "Autonomous AI Agents",
+        "Social Media Growth Systems",
+        "Content Creation Studio",
+        "Murtesa Alafi Services",
+        "Basirah Infinity Services",
+      ],
+    }),
   component: ServicesPage,
 });
+
+const DEFAULT_SERVICES = [
+  {
+    id: "branding",
+    title: "Brand Architecture & Identity",
+    icon: "Palette",
+    tag: "SIGNATURE",
+    short: "Comprehensive visual identity design, logo suites, typography hierarchies, and brand guidelines that project authority.",
+    price: "From $499",
+    features: [
+      "Vector logo suite & monochrome marks",
+      "Typography system & color architectures",
+      "Brand guideline guidelines (PDF & Web)",
+      "Social media kit & marketing collateral",
+    ],
+  },
+  {
+    id: "web-dev",
+    title: "High-Performance Web Platforms",
+    icon: "Layout",
+    tag: "ENGINEERED",
+    short: "Sub-second responsive web apps, e-commerce storefronts, and conversion-optimized funnels built on modern edge infrastructure.",
+    price: "From $899",
+    features: [
+      "Custom React 19 / TypeScript development",
+      "Tailwind CSS responsive design systems",
+      "SEO, Core Web Vitals, and accessibility optimized",
+      "Full CMS, database, and API integrations",
+    ],
+  },
+  {
+    id: "ai-automation",
+    title: "Autonomous AI & Workflow Systems",
+    icon: "Bot",
+    tag: "NEXT-GEN",
+    short: "Custom intelligent agents, automated lead capture pipelines, CRM synchronizations, and AI customer care bots.",
+    price: "From $1,290",
+    features: [
+      "24/7 intelligent agent deployment",
+      "Multi-tool CRM and webhook automations",
+      "Zero-touch lead qualification funnels",
+      "Custom fine-tuned knowledge bases",
+    ],
+  },
+  {
+    id: "social-media",
+    title: "Social Media & Viral Growth Engine",
+    icon: "Megaphone",
+    tag: "COMPOUNDING",
+    short: "Data-driven organic content strategies, short-form video scripting, visual grids, and cross-platform growth engines.",
+    price: "From $399",
+    features: [
+      "Monthly content calendars & scripts",
+      "Short-form video editing (Reels, TikTok, Shorts)",
+      "Audience engagement protocols",
+      "Analytics reporting & ROI attribution",
+    ],
+  },
+  {
+    id: "content-creation",
+    title: "Cinematic Content & Motion Studio",
+    icon: "Sparkles",
+    tag: "STUDIO",
+    short: "High-definition 3D graphics, motion graphic showreels, cinematic video assets, and promotional media.",
+    price: "From $349",
+    features: [
+      "4K video editing & color grading",
+      "3D product visualizers & mockups",
+      "Motion graphics & animated titles",
+      "Multi-channel export packages",
+    ],
+  },
+  {
+    id: "strategy",
+    title: "Strategic Growth & Enterprise Consulting",
+    icon: "Brain",
+    tag: "EXECUTIVE",
+    short: "One-on-one architecture sessions with Murtesa Alafi to position, price, and scale digital assets sustainably.",
+    price: "From $690",
+    features: [
+      "Direct consultation with Murtesa Alafi",
+      "Comprehensive digital audit & roadmap",
+      "Monetization & unit economics modeling",
+      "Ongoing executive advisory",
+    ],
+  },
+];
 
 const ICON_MAP: Record<string, any> = {
   Palette,
@@ -26,7 +125,7 @@ const ICON_MAP: Record<string, any> = {
 };
 
 function ServicesPage() {
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
 
   useEffect(() => {
     async function load() {
@@ -40,6 +139,14 @@ function ServicesPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Services", item: `${SITE_URL}/services` },
+          ]),
+          getServicesSchema(),
+        ]}
+      />
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-16 text-center">
         <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan mb-4">
           <Sparkles className="h-3 w-3" /> Directed by Murtesa Alafi

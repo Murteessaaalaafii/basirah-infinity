@@ -1,0 +1,44 @@
+# Basirah Infinity
+
+> Basirah Infinity is an AI-powered digital agency, technology studio, and creative ecosystem founded and directed by Murtesa Alafi. The studio engineers sovereign brand identities, high-conversion web platforms, autonomous AI workflows, and viral content pipelines for ambitious businesses, founders, and institutions worldwide.
+
+Official Domain: https://basirahinfinity.com
+Founder & Creative Director: Murtesa Alafi
+Contact Email: basirahinfinity@gmail.com
+Telephone: +251 708 229 717
+Headquarters: Addis Ababa, Ethiopia (Serving Global Clients)
+
+## Core Capabilities & Services
+
+- [Services Overview](https://basirahinfinity.com/services): Comprehensive digital services spanning branding, web design, AI systems, content, and automation.
+- [AI Automation & Agent Systems](https://basirahinfinity.com/services#ai): Autonomous workflow architecture, custom LLM integrations, CRM automation, and multi-agent systems that eliminate repetitive operational overhead.
+- [High-Conversion Web Design](https://basirahinfinity.com/services#web): Modern, blazing-fast web applications built on React 19, TypeScript, TanStack Start, and modern edge infrastructure.
+- [Brand Identity Architecture](https://basirahinfinity.com/services#branding): Sovereign visual identities, 3D brand marks, luxury design systems, and comprehensive brand guidelines.
+- [Content Creation & Viral Engines](https://basirahinfinity.com/services#content): Short-form video production (CapCut/Reels formats), motion graphics, 3D holograms, and editorial copywriting.
+
+## Case Studies & Selected Work
+
+- [Showcase & Portfolio Works](https://basirahinfinity.com/works): Client case studies and digital products delivered across technology, beauty, e-commerce, and enterprise sectors.
+- [Portfolio Gallery](https://basirahinfinity.com/portfolio): Curated interactive showcase with quantifiable impact metrics.
+
+## Pricing & Engagements
+
+- [Transparent Pricing Packages](https://basirahinfinity.com/pricing): Fixed-scope and custom enterprise plans (Launch, Growth, and Sovereign Empire packages).
+- [Start a Project](https://basirahinfinity.com/order): Request a new project with clear milestones and immediate onboarding.
+- [Direct Consultation](https://basirahinfinity.com/contact): Book a 1-on-1 strategy consultation directly with Murtesa Alafi.
+
+## Organization & Leadership
+
+- [About Murtesa Alafi](https://basirahinfinity.com/about): Founder biography, design philosophy, leadership principles, and mission of Basirah Infinity.
+- [Partner & Co-Building Network](https://basirahinfinity.com/collaborate): Agency alliance and partner network with 20% recurring revenue sharing.
+
+## Legal & Compliance
+
+- [Privacy Policy](https://basirahinfinity.com/privacy): Data protection practices, cookie policy, and user privacy commitments.
+- [Terms of Service](https://basirahinfinity.com/terms): Service terms, client deliverables, licensing, and payment policies.
+
+## Machine-Readable Context for LLMs & AI Search
+
+For comprehensive entity definitions, detailed service specifications, and structured technical data, see:
+- [Full LLM Knowledge File](https://basirahinfinity.com/llms-full.txt)
+

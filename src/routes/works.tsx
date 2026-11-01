@@ -7,19 +7,65 @@ import { ArrowRight, Sparkles, ExternalLink } from "lucide-react";
 import { fetchWorks } from "@/integrations/firebase/helpers";
 import brandBoard from "@/assets/ma-logo.jpg";
 import coverImg from "@/assets/basirah-cover.jpg";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/works")({
-  head: () => ({
-    meta: [
-      { title: "Our Works — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "A showcase of brands, websites, and AI systems crafted by Basirah Infinity and Murtesa Alafi." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Our Works & Case Studies — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Explore verified digital case studies, luxury visual identities, high-conversion web platforms, and autonomous AI systems crafted by Basirah Infinity.",
+      path: "/works",
+      keywords: [
+        "Murtesa Alafi Works",
+        "Basirah Infinity Portfolio",
+        "AI Digital Studio Case Studies",
+        "Web Development Showcase",
+        "Branding Portfolio",
+      ],
+    }),
   component: WorksPage,
 });
 
+const DEFAULT_WORKS = [
+  {
+    id: "halo-beauty",
+    title: "Halo Beauty Sovereign Rebrand",
+    category: "Branding · Web Architecture",
+    tag: "Luxury Retail",
+    client: "Halo Global",
+    summary: "Complete aesthetic redesign, high-conversion headless e-commerce store, and custom 3D packaging visualizers.",
+    impact: "+140% sales conversion in 30 days",
+    gradient: "from-pink-500/40 to-purple-600/40",
+    liveUrl: "https://basirahinfinity.com",
+  },
+  {
+    id: "northwave-saas",
+    title: "Northwave Autonomous AI Operations",
+    category: "AI · Workflow Automation",
+    tag: "Enterprise SaaS",
+    client: "Northwave Labs",
+    summary: "Automated multi-agent customer onboarding pipeline, automated reporting, and CRM webhook intelligence.",
+    impact: "Replaced 3 manual operations roles",
+    gradient: "from-blue-500/40 to-cyan-500/40",
+    liveUrl: "https://basirahinfinity.com",
+  },
+  {
+    id: "lumen-coaching",
+    title: "Lumen High-Ticket Growth Engine",
+    category: "Funnels · Content Architecture",
+    tag: "Creator Economy",
+    client: "Lumen Academy",
+    summary: "High-ticket webinar funnel, automated calendar booking workflows, and cinematic short-form video distribution.",
+    impact: "10x qualified lead flow in 6 weeks",
+    gradient: "from-amber-500/40 to-pink-500/40",
+    liveUrl: "https://basirahinfinity.com",
+  },
+];
+
 function WorksPage() {
-  const [works, setWorks] = useState<any[]>([]);
+  const [works, setWorks] = useState<any[]>(DEFAULT_WORKS);
 
   useEffect(() => {
     async function load() {
@@ -33,6 +79,13 @@ function WorksPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Works", item: `${SITE_URL}/works` },
+          ]),
+        ]}
+      />
       {/* HERO */}
       <section className="relative overflow-hidden pb-12 pt-16">
         <div

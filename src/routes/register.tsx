@@ -24,14 +24,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { NexoraLogo } from "@/components/NexoraLogo";
 import { toast } from "sonner";
 import { Loader2, ArrowRight, UserCheck, Handshake, ShieldCheck, Sparkles, Briefcase, Globe, CheckCircle2 } from "lucide-react";
+import { buildRouteSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/register")({
-  head: () => ({
-    meta: [
-      { title: "Create Account / Partner Registration — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Join Basirah Infinity as a client or verified agency partner. Unlock AI-powered scale and co-building opportunities." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Create Account / Partner Registration — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Join Basirah Infinity as a client or verified agency partner. Unlock AI-powered scale, digital growth systems, and co-building opportunities.",
+      path: "/register",
+    }),
   validateSearch: (search: Record<string, unknown>) => {
     return {
       role: (search.role as string) || "client",

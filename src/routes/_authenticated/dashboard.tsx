@@ -64,6 +64,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
     meta: [
       { title: "Client Portal & Consultation — Basirah Infinity | Directed by Murtesa Alafi" },
       { name: "description", content: "Client portal with project consultation, requirement specifications, order milestones, and delivery channels." },
+      { name: "robots", content: "noindex, nofollow, noarchive" },
+      { name: "googlebot", content: "noindex, nofollow, noarchive" },
     ],
   }),
   component: Dashboard,

@@ -14,7 +14,13 @@ import { Sparkles, Wand2, Download, Trash2, Image as ImageIcon } from "lucide-re
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/lab")({
-  head: () => ({ meta: [{ title: "Creative Lab — Basirah Infinity | Murtesa Alafi" }] }),
+  head: () => ({
+    meta: [
+      { title: "Creative Lab — Basirah Infinity | Murtesa Alafi" },
+      { name: "robots", content: "noindex, nofollow, noarchive" },
+      { name: "googlebot", content: "noindex, nofollow, noarchive" },
+    ],
+  }),
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const user = await waitForAuth();

@@ -1,14 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { SiteShell } from "@/components/SiteShell";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/portfolio")({
-  head: () => ({
-    meta: [
-      { title: "Portfolio — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Selected work from Basirah Infinity: branding, websites and AI automation case studies." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Portfolio & Client Transformations — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Selected client transformations from Basirah Infinity: Luxury brand systems, web platforms, and autonomous AI automation case studies.",
+      path: "/portfolio",
+      keywords: [
+        "Basirah Infinity Portfolio",
+        "Murtesa Alafi Projects",
+        "AI Automation Case Studies",
+        "Digital Agency Work",
+      ],
+    }),
   component: PortfolioPage,
 });
 
@@ -24,6 +33,13 @@ const work = [
 function PortfolioPage() {
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Portfolio", item: `${SITE_URL}/portfolio` },
+          ]),
+        ]}
+      />
       <section className="mx-auto max-w-4xl px-6 pb-12 pt-16 text-center">
         <h1 className="font-display text-5xl font-bold">Selected Work</h1>
         <p className="mt-4 text-muted-foreground">A taste of what Basirah Infinity ships under Murtesa Alafi's direction.</p>

@@ -48,6 +48,8 @@ export const Route = createFileRoute("/_authenticated/partner-dashboard")({
     meta: [
       { title: "Partner Command Portal — Basirah Infinity | Directed by Murtesa Alafi" },
       { name: "description", content: "Executive partner and agency dashboard. Manage client referrals, 20% commission pipeline, co-building sprints, and partner asset vaults." },
+      { name: "robots", content: "noindex, nofollow, noarchive" },
+      { name: "googlebot", content: "noindex, nofollow, noarchive" },
     ],
   }),
   beforeLoad: async () => {

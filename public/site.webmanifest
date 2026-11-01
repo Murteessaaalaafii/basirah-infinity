@@ -1,0 +1,24 @@
+{
+  "name": "Basirah Infinity — By Murtesa Alafi",
+  "short_name": "Basirah",
+  "description": "Next era of digital growth. AI-powered branding, high-conversion web platforms, and automated workflow ecosystems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#03060a",
+  "theme_color": "#03060a",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

@@ -10,14 +10,23 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { insertDoc, ADMIN_PRIMARY_EMAIL } from "@/integrations/firebase/helpers";
 import { toast } from "sonner";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact Us — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Get in touch with Basirah Infinity. Founded & Directed by Murtesa Alafi. We respond within 24 hours." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Contact Us & Project Inquiry — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Initiate your project with Murtesa Alafi and the Basirah Infinity team. Direct inquiries for branding, web platforms, and AI automation. Fast 24-hour response.",
+      path: "/contact",
+      keywords: [
+        "Contact Basirah Infinity",
+        "Murtesa Alafi Contact",
+        "Addis Ababa Digital Studio",
+        "Hire AI Web Developer",
+      ],
+    }),
   component: ContactPage,
 });
 
@@ -89,6 +98,13 @@ function ContactPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Contact", item: `${SITE_URL}/contact` },
+          ]),
+        ]}
+      />
       <section className="mx-auto max-w-4xl px-6 pb-8 pt-16 text-center">
         <span className="liquid-glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-neon-cyan">
           <Sparkles className="h-3 w-3" /> Connect with Basirah Infinity

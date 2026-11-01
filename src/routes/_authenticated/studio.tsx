@@ -111,6 +111,8 @@ export const Route = createFileRoute("/_authenticated/studio")({
     meta: [
       { title: "Basirah Creative Suite — Advanced Creative Workstation | Directed by Murtesa Alafi" },
       { name: "description", content: "All-in-one sovereign creative suite: Video editing timeline, graphics & photo forge, audio synthesizer, 3D VFX lab, and 100+ miracle components." },
+      { name: "robots", content: "noindex, nofollow, noarchive" },
+      { name: "googlebot", content: "noindex, nofollow, noarchive" },
     ],
   }),
   beforeLoad: async () => {

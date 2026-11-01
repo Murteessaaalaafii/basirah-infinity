@@ -18,14 +18,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { NexoraLogo } from "@/components/NexoraLogo";
 import { toast } from "sonner";
 import { Loader2, Sparkles, CheckCircle2 } from "lucide-react";
+import { buildRouteSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({
-    meta: [
-      { title: "Login — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Sign in to your Basirah Infinity workspace." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Client & Admin Login — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Secure authentication portal for Basirah Infinity clients, agency partners, and administrators.",
+      path: "/login",
+    }),
   component: LoginPage,
 });
 

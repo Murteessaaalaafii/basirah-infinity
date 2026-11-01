@@ -10,14 +10,23 @@ import { insertDoc, ADMIN_PRIMARY_EMAIL } from "@/integrations/firebase/helpers"
 import { toast } from "sonner";
 import { Sparkles, Palette, Layout, Bot, Megaphone, Brain, Loader2, ArrowRight, Check, Phone } from "lucide-react";
 import brandBoard from "@/assets/ma-logo.jpg";
+import { JsonLd } from "@/components/JsonLd";
+import { buildRouteSeo, getBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/order")({
-  head: () => ({
-    meta: [
-      { title: "Order a Service — Basirah Infinity | Directed by Murtesa Alafi" },
-      { name: "description", content: "Order branding, web design, AI automation, content & social media services from Basirah Infinity." },
-    ],
-  }),
+  head: () =>
+    buildRouteSeo({
+      title: "Order a Service Sprint — Basirah Infinity | Directed by Murtesa Alafi",
+      description:
+        "Commission bespoke branding, high-performance web development, autonomous AI automation pipelines, and content systems from Basirah Infinity. Rapid kick-off within 24h.",
+      path: "/order",
+      keywords: [
+        "Order Basirah Infinity",
+        "Commission Murtesa Alafi",
+        "Hire Web Developer",
+        "Brand Design Sprint",
+      ],
+    }),
   component: OrderPage,
 });
 
@@ -103,6 +112,13 @@ function OrderPage() {
 
   return (
     <SiteShell>
+      <JsonLd
+        data={[
+          getBreadcrumbSchema([
+            { name: "Order", item: `${SITE_URL}/order` },
+          ]),
+        ]}
+      />
       <section className="relative overflow-hidden pb-10 pt-16">
         <div
           className="absolute inset-0 -z-10 opacity-[0.06]"
